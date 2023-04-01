@@ -4,8 +4,8 @@
 	"name": "Debian",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"dockerComposeFile": "../../docker-compose.yml",
-	"service": "geth-node",
-	"workspaceFolder": "/workspaces/geth-node",
+	"service": "geth-node1",
+	"workspaceFolder": "/workspaces/geth-node1",
 	"shutdownAction": "none"
 
 	// Features to add to the dev container. More info: https://containers.dev/features.

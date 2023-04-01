@@ -1,12 +1,21 @@
 services:
-  geth-node:
+  geth-node1:
     image: try-ethereum/geth-node:v1.11.5
     volumes:
       - .:/workspaces:cached
-      - geth-volume:/var/geth:rw
+      - geth-volume1:/var/geth:rw
     networks:
       default:
         ipv4_address: 172.29.0.2
+    command: sleep infinity
+  geth-node2:
+    image: try-ethereum/geth-node:v1.11.5
+    volumes:
+      - .:/workspaces:cached
+      - geth-volume2:/var/geth:rw
+    networks:
+      default:
+        ipv4_address: 172.29.0.3
     command: sleep infinity
 networks:
   default:
@@ -16,5 +25,7 @@ networks:
       - subnet: 172.29.0.0/16
         gateway: 172.29.0.1
 volumes:
-  geth-volume:
+  geth-volume1:
+    external: true
+  geth-volume2:
     external: true
