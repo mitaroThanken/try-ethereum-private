@@ -1,0 +1,1 @@
+bootnode -nodekey boot.key -nat extip:$(hostname -I) -netrestrict 172.29.0.0/16

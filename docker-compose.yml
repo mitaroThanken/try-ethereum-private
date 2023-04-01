@@ -17,6 +17,15 @@ services:
       default:
         ipv4_address: 172.29.0.3
     command: sleep infinity
+  boot-node:
+    image: try-ethereum/geth-node:v1.11.5
+    volumes:
+      - .:/workspaces:cached
+      - geth-volume1:/var/geth:rw
+    networks:
+      default:
+        ipv4_address: 172.29.0.100
+    command: sleep infinity
 networks:
   default:
    driver: bridge
