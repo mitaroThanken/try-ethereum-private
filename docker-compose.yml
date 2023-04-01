@@ -4,7 +4,17 @@ services:
     volumes:
       - .:/workspaces:cached
       - geth-volume:/var/geth:rw
+    networks:
+      default:
+        ipv4_address: 172.29.0.2
     command: sleep infinity
+networks:
+  default:
+   driver: bridge
+   ipam:
+    config:
+      - subnet: 172.29.0.0/16
+        gateway: 172.29.0.1
 volumes:
   geth-volume:
     external: true
