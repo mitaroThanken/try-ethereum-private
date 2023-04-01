@@ -12,3 +12,5 @@ ENV GETH_VERSION=${GETH_VERSION}
 COPY --from=builder /go/go-ethereum/build/bin /opt/go-ethereum-${GETH_VERSION}
 RUN echo "export PATH="$"PATH:/opt/go-ethereum-${GETH_VERSION}" > /etc/profile.d/99-add-path-to-geth.sh \
     && chmod a+x /etc/profile.d/99-add-path-to-geth.sh
+RUN mkdir /var/geth \
+    && chown -R vscode /var/geth
