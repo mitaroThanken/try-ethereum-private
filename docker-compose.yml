@@ -1,10 +1,6 @@
 services:
   geth-node:
-    image: try-ethereum/geth-node
-    build:
-      context: geth-node/.devcontainer
-      dockerfile: Dockerfile
-      target: devcontainer
+    image: try-ethereum/geth-node:v1.11.5
     volumes:
       - .:/workspaces:cached
       - geth-volume:/var/geth:rw
