@@ -1,0 +1,9 @@
+services:
+  geth-node:
+    image: try-ethereum/geth-node
+    build:
+      context: geth-node/.devcontainer
+      dockerfile: Dockerfile
+    volumes:
+      - .:/workspaces:cached
+    command: sleep infinity
