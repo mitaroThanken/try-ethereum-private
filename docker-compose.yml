@@ -1,0 +1,19 @@
+services:
+  bootnode:
+    image: ethereum/client-go:alltools-v1.11.5
+    volumes:
+      - type: bind
+        source: bootnode/boot.key
+        target: /root/boot.key
+        read_only: true
+    networks:
+      default:
+        ipv4_address: 172.29.0.100
+    command: bootnode -nodekey /root/boot.key -nat extip:172.29.0.100 -netrestrict 172.29.0.0/16
+networks:
+  default:
+   driver: bridge
+   ipam:
+    config:
+      - subnet: 172.29.0.0/16
+        gateway: 172.29.0.200

@@ -106,3 +106,39 @@ WIP
     -c "bootnode -genkey boot.key && cat boot.key" \
     > bootnode/boot.key
     ```
+
+1. `docker-compose.yml` を用意する
+
+    この時点では、IPアドレスを固定した Bootnode だけからなる構成としておく。
+    （この項をコミットした時点を参照）
+
+1. Bootnode の enode アドレスを控える
+
+    コンテナを起動する。
+
+    ```shell
+    docker compose up
+    ```
+
+    以下のようなログが観測できる。
+
+    ```text
+    20:38 $ docker compose up
+    [+] Running 2/2
+     ✔ Network try-ethereum_default       Created                                                                                                                                                     0.2s 
+     ✔ Container try-ethereum-bootnode-1  Created                                                                                                                                                     0.2s 
+    Attaching to try-ethereum-bootnode-1
+    try-ethereum-bootnode-1  | INFO [04-08|11:43:58.950] Mapped network port                      proto=udp extport=30301 intport=30301 interface=ExtIP(172.29.0.100)
+    try-ethereum-bootnode-1  | enode://804a97abc3561ea5cba672707b418810262378849967a9b5f38d19c3ba687fcf2f927770a9ade6fa283f92da7d66b77f8dbe00ca704237415d2989ba7fe87a42@172.29.0.100:0?discport=30301
+    try-ethereum-bootnode-1  | Note: you're using cmd/bootnode, a developer tool.
+    try-ethereum-bootnode-1  | We recommend using a regular node as bootstrap node for production deployments.
+    try-ethereum-bootnode-1  | INFO [04-08|11:43:58.956] New local node record                    seq=1,680,954,238,953 id=dbdebe9299065db7 ip=<nil> udp=0 tcp=0
+    ```
+
+    上記のログの場合、
+    `enode://804a97abc3561ea5cba672707b418810262378849967a9b5f38d19c3ba687fcf2f927770a9ade6fa283f92da7d66b77f8dbe00ca704237415d2989ba7fe87a42@172.29.0.100:0?discport=30301`
+    が Bootnode の enode アドレス。
+
+    これを`bootnode/enode.txt`に控える。改行は不要。
+
+    控え終わったら、コンテナを停止させる。
