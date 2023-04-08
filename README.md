@@ -5,7 +5,7 @@ WIP
 ## 前提
 
 * 大筋は以下のドキュメントに従っている
-  * [Private Network](https://geth.ethereum.org/docs/fundamentals/private-network)
+  * [Private Networks](https://geth.ethereum.org/docs/fundamentals/private-network)
 * `node1` と書かれている箇所については、`node1`・`node2`・`node3`……と、必要なノード数分繰り返す。
 
 ## Geth Init
@@ -70,7 +70,7 @@ WIP
 
 1. `genesis.json` を修正する
 
-    [Private Network](https://geth.ethereum.org/docs/fundamentals/private-network) の
+    [Private Networks](https://geth.ethereum.org/docs/fundamentals/private-network) の
     "Clique Example" を参照。
 
 1. ノードを初期化するため、client-go のコンテナを一時的に立ち上げ、`sh` にアタッチする
