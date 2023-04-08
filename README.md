@@ -149,6 +149,10 @@ WIP
 
     `geth-node/boot.sh`を参照。
 
+    * 起動後の動作を安定させるため、起動開始のタイミングをずらせるようにしている（冒頭の`sleep`）
+
+      `docker-compose.yml` を参照。
+
     * `--bootnodes` に Bootnode の enode アドレスを指定している
     * 起動後の動作を安定させるため、`--syncmode full` とする
     * この時点ではマイニング（Clique におけるサイニング）を成立させるため、以下の設定としている

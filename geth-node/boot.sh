@@ -1,4 +1,5 @@
 #!/bin/sh
+sleep $1
 cd
 geth -networkid 50155 \
 --nat extip:$(hostname -i) \
