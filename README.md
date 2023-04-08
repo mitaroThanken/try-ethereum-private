@@ -142,3 +142,26 @@ WIP
     これを`bootnode/enode.txt`に控える。改行は不要。
 
     控え終わったら、コンテナを停止させる。
+
+## ノードを追加する
+
+1. 起動用のスクリプトを用意する
+
+    `geth-node/boot.sh`を参照。
+
+    * `--bootnodes` に Bootnode の enode アドレスを指定している
+    * 起動後の動作を安定させるため、`--syncmode full` とする
+    * この時点ではマイニング（Clique におけるサイニング）を成立させるため、以下の設定としている
+      * アカウントをアンロックする（`--unlock`・`--password`）
+      * マイニングを開始してする（`--mine`）
+      * マイニングを行うアカウントを指定（`--miner.etherbase`）
+
+1. `docker-compose.yml`に 全ノード分のサービスとボリュームを追加する
+
+    ここをコミットしている時点の `docker-compose.yml` を参照。
+
+1. `docker compose up`
+
+    しばらく待っていると `"🔗 block reached canonical chain"` が記録されていることが確認できる。
+
+    確認できなければ、どこかのステップが間違っている。ログをよく確認する。
