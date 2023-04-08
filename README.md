@@ -90,3 +90,19 @@ WIP
     ```shell
     exit
     ```
+
+## Bootnode の準備
+
+ノード同士の接続を簡便にするため、 `bootnode` を使用する。
+
+1. `boot.key` を生成する
+
+    ```shell
+    mkdir bootnode
+    ```
+
+    ```shell
+    docker run -it --rm ethereum/client-go:alltools-v1.11.5 /bin/sh \
+    -c "bootnode -genkey boot.key && cat boot.key" \
+    > bootnode/boot.key
+    ```
