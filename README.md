@@ -2,15 +2,17 @@
 
 WIP
 
-## 前提
+## Geth でプライベートネットワークを構成
+
+### 前提
 
 * 大筋は以下のドキュメントに従っている
   * [Private Networks](https://geth.ethereum.org/docs/fundamentals/private-network)
 * `node1` と書かれている箇所については、`node1`・`node2`・`node3`……と、必要なノード数分繰り返す。
 
-## Geth Init
+### Geth Init
 
-### 各ノードでの署名用にアカウントを1つずつ作る
+#### 各ノードでの署名用にアカウントを1つずつ作る
 
 1. これから作るアカウントのパスワードを用意する
 
@@ -66,7 +68,7 @@ WIP
 
     `0x`を含む文字列。改行は不要。
 
-### ノードを初期化する
+#### ノードを初期化する
 
 1. `genesis.json` を修正する
 
@@ -91,7 +93,7 @@ WIP
     exit
     ```
 
-## Bootnode の準備
+### Bootnode の準備 - Docker Compose の導入
 
 ノード同士の接続を簡便にするため、 `bootnode` を使用する。
 
@@ -143,7 +145,7 @@ WIP
 
     控え終わったら、コンテナを停止させる。
 
-## ノードを追加する
+### ノードを追加する
 
 1. 起動用のスクリプトを用意する
 
@@ -170,7 +172,7 @@ WIP
 
     確認できなければ、どこかのステップが間違っている。ログをよく確認する。
 
-## ノードにアタッチして疎通確認
+### ノードにアタッチして疎通確認
 
 [Private Networks](https://geth.ethereum.org/docs/fundamentals/private-network)にのっとって、
 疎通確認。
