@@ -8,7 +8,7 @@ WIP
 
 * 大筋は以下のドキュメントに従っている
   * [Private Networks](https://geth.ethereum.org/docs/fundamentals/private-network)
-* `node1` と書かれている箇所については、`node1`・`node2`・`node3`……と、必要なノード数分繰り返す。
+* `node1` と書かれている箇所については、`node1`・`node2`・`node3`……と、必要なノード数分繰り返す
 
 ### Geth Init
 
