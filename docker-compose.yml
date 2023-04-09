@@ -56,6 +56,28 @@ services:
     depends_on:
       - bootnode
       - node1
+  node3-clef:
+    image: ethereum/client-go:alltools-v1.11.5
+    volumes:
+      - type: volume
+        source: geth-node3-volume
+        target: /root/.ethereum
+        read_only: true
+      - type: volume
+        source: clef-node3-volume
+        target: /root/.clef
+      - type: bind
+        source: clef-node3/PASSWORD
+        target: /root/PASSWORD
+        read_only: true
+      - type: bind
+        source: clef-node/rules.js
+        target: /root/rules.js
+        read_only: true
+    networks:
+      default:
+        ipv4_address: 172.29.0.30
+    command: sleep infinity
   node3:
     image: ethereum/client-go:alltools-v1.11.5
     volumes:
@@ -81,11 +103,12 @@ services:
     networks:
       default:
         ipv4_address: 172.29.0.3
-    command: /root/boot.sh 5
+    command: sleep infinity
     depends_on:
       - bootnode
       - node1
       - node2
+      - node3-clef
   bootnode:
     image: ethereum/client-go:alltools-v1.11.5
     volumes:
@@ -105,6 +128,8 @@ networks:
       - subnet: 172.29.0.0/16
         gateway: 172.29.0.200
 volumes:
+  clef-node3-volume:
+    external: true
   geth-node1-volume:
     external: true
   geth-node2-volume:

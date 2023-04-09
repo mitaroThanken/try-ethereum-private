@@ -475,3 +475,51 @@ WIP
     exit
     ```
 
+### 起動テスト・スクリプトの差し替え
+
+Geth の起動順において、安定しているノード 1が他より先行して起動する必要があるため、まず node3 でテストを行うこととする。
+command を一時的に `sleep infinity` にして、clef 用のコンテナ（サービス）を追加。
+編集が終わったら、コンテナ群を起動する。
+
+1. `docker-compose.yml` を修正
+
+    ここをコミットした時点の `docker-compose.yml` を参照。
+
+1. コンテナを起動
+
+    ```shell
+    docker compose up
+    ```
+
+1. 起動テスト
+
+    `sleep infinity` としたコンテナ内のシェルにアタッチし、clef、geth の順にサービスを開始。
+
+    ```shell
+    docker compose exec node3-clef /bin/sh
+    ```
+
+    ```shell
+    clef --chainid 50155 --suppress-bootwarn \
+    --rules /root/rules.js \
+    --http \
+    --http.addr $(hostname -i) \
+    < /root/PASSWORD
+    ```
+
+    ```shell
+    docker compose exec node3 /bin/sh
+    ```
+
+    ```shell
+    geth -networkid 50155 \
+    --nat extip:$(hostname -i) \
+    --netrestrict 172.29.0.0/16 \
+    --bootnodes $(cat /root/bootnode-enode.txt) \
+    --syncmode full \
+    --mine \
+    --miner.etherbase $(cat /root/etherbase) \
+    --signer http://$(hostname -i)0:8550
+    ```
+
+    ブロックへのサインが行われていることを確認したら、全サービスを停止する。
