@@ -8,7 +8,7 @@ WIP
 
 * 大筋は以下のドキュメントに従っている
   * [Private Networks](https://geth.ethereum.org/docs/fundamentals/private-network)
-* `node1` と書かれている箇所については、`node1`・`node2`・`node3`……と、必要なノード数分繰り返す。
+* `node1` と書かれている箇所については、`node1`・`node2`・`node3`……と、必要なノード数分繰り返す
 
 ### Geth Init
 
@@ -374,3 +374,200 @@ WIP
       uncles: []
     }
     ```
+
+## Clef で Clique のサイニングをおこなう
+
+### 前提
+
+* 大筋は以下のドキュメントに従っている
+  * [Clique signing](https://geth.ethereum.org/docs/tools/clef/clique-signing)
+* `node1` と書かれている箇所については、`node1`・`node2`・`node3`……と、必要なノード数分繰り返す
+
+### Prepping Clef
+
+1. マスターシードのパスワードを用意する
+
+    ```shell
+    mkdir clef-node1
+    ```
+
+    ```shell
+    touch clef-node1/PASSWORD
+    ```
+
+1. `clef-node1/PASSWORD` にパスワードを設定する
+
+    （v1.11.5 時点において、使用できる文字種に制限がある……？）
+
+    改行は不要。
+
+1. Clef 用のボリュームを作る
+
+    ```shell
+    docker volume create clef-node1-volume
+    ```
+
+1. Clef の初期設定を行うため、client-go のコンテナを一時的に立ち上げ、`sh` にアタッチする
+
+    ```shell
+    docker run \
+    -v geth-node1-volume:/root/.ethereum \
+    -v clef-node1-volume:/root/.clef \
+    --mount type=bind,source="$(pwd)"/geth-node1/etherbase,target=/root/etherbase,readonly \
+    -it --rm \
+    ethereum/client-go:alltools-v1.11.5 \
+    /bin/sh
+    ```
+
+1. アタッチしたシェルにて、初期設定を行う
+
+    `--chainid` は `geth-node/genesis.json` での設定と合わせる。
+
+    ```shell
+    clef --chainid 50155 --suppress-bootwarn init
+    ```
+
+    `clef_node1/PASSWORD`に設定したパスワードで初期化する。
+
+    シェルから抜けずに先に進む。
+
+### Storeing passwords in clef
+
+1. 対応する Geth のノードのユーザーのパスワードを保存する
+
+    ```shell
+    clef --chainid 50155 --suppress-bootwarn \
+    setpw $(cat /root/etherbase)
+    ```
+
+    ```shell
+    exit
+    ```
+
+### Using rules to approve blocks
+
+1. `TLDR quick-version` を参照し、`rules.js` を `clef-node/rules.js` として保存する
+
+    （あとで調整する意図で、 `ApproveTx()`を仕込んでいる。）
+
+1. 再び、client-go のコンテナを一時的に立ち上げ、`sh` にアタッチする
+
+    ```shell
+    docker run \
+    -v geth-node3-volume:/root/.ethereum \
+    -v clef-node3-volume:/root/.clef \
+    --mount type=bind,source="$(pwd)"/clef-node/rules.js,target=/root/rules.js,readonly \
+    --mount type=bind,source="$(pwd)"/clef-node3/PASSWORD,target=/root/PASSWORD,readonly \
+    -it --rm \
+    ethereum/client-go:alltools-v1.11.5 \
+    /bin/sh
+    ```
+
+1. Attest it
+
+    ```shell
+    clef --chainid 50155 --suppress-bootwarn \
+    attest `sha256sum /root/rules.js | cut -f1` \
+    < /root/PASSWORD
+    ```
+
+    ```shell
+    exit
+    ```
+
+### 起動テスト・スクリプトの差し替え
+
+#### 起動テスト
+
+Geth の起動順において、安定しているノード 1が他より先行して起動する必要があるため、まず node3 でテストを行うこととする。
+command を一時的に `sleep infinity` にして、clef 用のコンテナ（サービス）を追加。
+編集が終わったら、コンテナ群を起動する。
+
+1. `docker-compose.yml` を修正
+
+    ここをコミットした時点の `docker-compose.yml` を参照。
+
+1. コンテナを起動
+
+    ```shell
+    docker compose up
+    ```
+
+1. 起動テスト
+
+    `sleep infinity` としたコンテナ内のシェルにアタッチし、clef、geth の順にサービスを開始。
+
+    ```shell
+    docker compose exec node3-clef /bin/sh
+    ```
+
+    ```shell
+    clef --chainid 50155 --suppress-bootwarn \
+    --rules /root/rules.js \
+    --http \
+    --http.addr $(hostname -i) \
+    < /root/PASSWORD
+    ```
+
+    ```shell
+    docker compose exec node3 /bin/sh
+    ```
+
+    ```shell
+    geth -networkid 50155 \
+    --nat extip:$(hostname -i) \
+    --netrestrict 172.29.0.0/16 \
+    --bootnodes $(cat /root/bootnode-enode.txt) \
+    --syncmode full \
+    --mine \
+    --miner.etherbase $(cat /root/etherbase) \
+    --signer http://$(hostname -i)0:8550
+    ```
+
+    ブロックへのサインが行われていることを確認したら、全サービスを停止する。
+
+#### スクリプトの差し替え
+
+1. clef を起動するスクリプトを用意する
+
+    ```shell
+    touch clef-node/boot.sh
+    ```
+
+    ```shell
+    chmod a+x clef-node/boot.sh
+    ```
+
+    `clef-node/boot.sh` での clef 起動時のオプションは起動テストでのものと同一でよい。
+
+1. geth の起動スクリプトを改定する
+
+    順番に移行していくため、既存の `geth-node/boot.sh` は残しておく。
+    （`geth-node/boot.sh` はすべてのノードの移行が終わりしだい、削除する。）
+
+    ```shell
+    touch geth-node/boot-with-clef.sh
+    ```
+
+    ```shell
+    chmod a+x geth-node/boot-with-clef.sh
+    ```
+
+    `geth-node/boot-with-clef.sh` での geth 起動時のオプションも起動テストのものと同一でよい。
+    ただし、`geth-node/boot.sh`で行っているように、任意の時間の待機ができるようにしておく必要がある。
+
+1. `docker-compose.yml`を修正する
+
+    起動テストが終わったコンテナに起動スクリプトをマウントし、
+    `sleep infinity` を起動スクリプトに差し替える。
+
+    geth の起動は、clef の起動完了を待つ必要があることに注意。
+
+1. 起動テスト
+
+    ```shell
+    docker compose up
+    ```
+
+すべてのノードが clef に依存するように変更したら、
+`geth-node/boot.sh` を削除する。
