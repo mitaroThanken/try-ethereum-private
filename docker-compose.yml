@@ -74,10 +74,14 @@ services:
         source: clef-node/rules.js
         target: /root/rules.js
         read_only: true
+      - type: bind
+        source: clef-node/boot.sh
+        target: /root/boot.sh
+        read_only: true
     networks:
       default:
         ipv4_address: 172.29.0.30
-    command: sleep infinity
+    command: /root/boot.sh
   node3:
     image: ethereum/client-go:alltools-v1.11.5
     volumes:
@@ -93,7 +97,7 @@ services:
         target: /root/PASSWORD
         read_only: true
       - type: bind
-        source: geth-node/boot.sh
+        source: geth-node/boot-with-clef.sh
         target: /root/boot.sh
         read_only: true
       - type: bind
@@ -103,7 +107,7 @@ services:
     networks:
       default:
         ipv4_address: 172.29.0.3
-    command: sleep infinity
+    command: /root/boot.sh 5
     depends_on:
       - bootnode
       - node1
