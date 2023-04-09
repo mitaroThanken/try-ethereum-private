@@ -1,19 +1,19 @@
 function OnSignerStartup(info) { }
 
 function ApproveListing() {
-  return "Approve"
+  return "Approve";
 }
 
 function ApproveSignData(r) {
   if (r.content_type == "application/x-clique-header") {
     for (var i = 0; i < r.messages.length; i++) {
-      var msg = r.messages[i]
+      var msg = r.messages[i];
       if (msg.name == "Clique header" && msg.type == "clique") {
-        return "Approve"
+        return "Approve";
       }
     }
   }
-  return "Reject"
+  return "Reject";
 }
 
 // 既知のアカウント
