@@ -374,3 +374,72 @@ WIP
       uncles: []
     }
     ```
+
+## Clef で Clique のサイニングをおこなう
+
+### 前提
+
+* 大筋は以下のドキュメントに従っている
+  * [Clique signing](https://geth.ethereum.org/docs/tools/clef/clique-signing)
+* `node1` と書かれている箇所については、`node1`・`node2`・`node3`……と、必要なノード数分繰り返す
+
+### Prepping Clef
+
+1. マスターシードのパスワードを用意する
+
+    ```shell
+    mkdir clef-node1
+    ```
+
+    ```shell
+    touch clef-node1/PASSWORD
+    ```
+
+1. `clef-node1/PASSWORD` にパスワードを設定する
+
+    （v1.11.5 時点において、使用できる文字種に制限がある……？）
+
+    改行は不要。
+
+1. Clef 用のボリュームを作る
+
+    ```shell
+    docker volume create clef-node1-volume
+    ```
+
+1. Clef の初期設定を行うため、client-go のコンテナを一時的に立ち上げ、`sh` にアタッチする
+
+    ```shell
+    docker run \
+    -v geth-node1-volume:/root/.ethereum \
+    -v clef-node1-volume:/root/.clef \
+    --mount type=bind,source="$(pwd)"/geth-node1/etherbase,target=/root/etherbase,readonly \
+    -it --rm \
+    ethereum/client-go:alltools-v1.11.5 \
+    /bin/sh
+    ```
+
+1. アタッチしたシェルにて、初期設定を行う
+
+    `--chainid` は `geth-node/genesis.json` での設定と合わせる。
+
+    ```shell
+    clef --chainid 50155 --suppress-bootwarn init
+    ```
+
+    `clef_node1/PASSWORD`に設定したパスワードで初期化する。
+
+    シェルから抜けずに先に進む。
+
+### Storeing passwords in clef
+
+1. 対応する Geth のノードのユーザーのパスワードを保存する
+
+    ```shell
+    clef --chainid 50155 --suppress-bootwarn \
+    setpw $(cat /root/etherbase)
+    ```
+
+    ```shell
+    exit
+    ```
