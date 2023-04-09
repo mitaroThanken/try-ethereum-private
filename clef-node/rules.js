@@ -17,6 +17,7 @@ function ApproveSignData(r) {
 }
 
 function ApproveTx(r) {
-  console.info("ApproveTx: r", r);
+  console.log("In ApproveTx: r");
+  console.log(JSON.stringify(r));
   return "FIXME";
 }
