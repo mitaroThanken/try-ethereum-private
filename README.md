@@ -443,3 +443,35 @@ WIP
     ```shell
     exit
     ```
+
+### Using rules to approve blocks
+
+1. `TLDR quick-version` を参照し、`rules.js` を `clef-node/rules.js` として保存する
+
+    （あとで調整する意図で、 `ApproveTx()`を仕込んでいる。）
+
+1. 再び、client-go のコンテナを一時的に立ち上げ、`sh` にアタッチする
+
+    ```shell
+    docker run \
+    -v geth-node3-volume:/root/.ethereum \
+    -v clef-node3-volume:/root/.clef \
+    --mount type=bind,source="$(pwd)"/clef-node/rules.js,target=/root/rules.js,readonly \
+    --mount type=bind,source="$(pwd)"/clef-node3/PASSWORD,target=/root/PASSWORD,readonly \
+    -it --rm \
+    ethereum/client-go:alltools-v1.11.5 \
+    /bin/sh
+    ```
+
+1. Attest it
+
+    ```shell
+    clef --chainid 50155 --suppress-bootwarn \
+    attest `sha256sum /root/rules.js | cut -f1` \
+    < /root/PASSWORD
+    ```
+
+    ```shell
+    exit
+    ```
+
