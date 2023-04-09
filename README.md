@@ -454,10 +454,10 @@ WIP
 
     ```shell
     docker run \
-    -v geth-node3-volume:/root/.ethereum \
-    -v clef-node3-volume:/root/.clef \
+    -v geth-node1-volume:/root/.ethereum \
+    -v clef-node1-volume:/root/.clef \
     --mount type=bind,source="$(pwd)"/clef-node/rules.js,target=/root/rules.js,readonly \
-    --mount type=bind,source="$(pwd)"/clef-node3/PASSWORD,target=/root/PASSWORD,readonly \
+    --mount type=bind,source="$(pwd)"/clef-node1/PASSWORD,target=/root/PASSWORD,readonly \
     -it --rm \
     ethereum/client-go:alltools-v1.11.5 \
     /bin/sh
