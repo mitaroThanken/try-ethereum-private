@@ -50,7 +50,7 @@ services:
     networks:
       default:
         ipv4_address: 172.29.0.1
-    command: /root/boot.sh 0
+    command: /root/boot.sh 5
     depends_on:
       - bootnode
       - node1-clef
@@ -105,7 +105,7 @@ services:
     networks:
       default:
         ipv4_address: 172.29.0.2
-    command: /root/boot.sh 5
+    command: /root/boot.sh 10
     depends_on:
       - bootnode
       - node1
@@ -161,7 +161,7 @@ services:
     networks:
       default:
         ipv4_address: 172.29.0.3
-    command: /root/boot.sh 5
+    command: /root/boot.sh 10
     depends_on:
       - bootnode
       - node1
