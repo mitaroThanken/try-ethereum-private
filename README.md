@@ -568,3 +568,6 @@ command を一時的に `sleep infinity` にして、clef 用のコンテナ（�
     ```shell
     docker compose up
     ```
+
+すべてのノードが clef に依存するように変更したら、
+`geth-node/boot.sh` を削除する。
