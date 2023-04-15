@@ -8,7 +8,7 @@
 	},
 	"features": {
 		"ghcr.io/devcontainers/features/java:1": {}
-	}
+	},
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
@@ -20,7 +20,16 @@
 	// "postCreateCommand": "yarn install",
 
 	// Configure tool-specific properties.
-	// "customizations": {},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"mhutchie.git-graph",
+				"trufflesuite-csi.truffle-vscode",
+				"SonarSource.sonarlint-vscode",
+				"streetsidesoftware.code-spell-checker"
+			]
+		}
+	},
 
 	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
 	// "remoteUser": "root"
