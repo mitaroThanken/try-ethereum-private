@@ -177,6 +177,17 @@ services:
       default:
         ipv4_address: 172.29.0.100
     command: bootnode -nodekey /root/boot.key -nat extip:172.29.0.100 -netrestrict 172.29.0.0/16
+  truffle:
+    build:
+      context: ./truffle/.devcontainer
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/workspaces:cached
+    command: sleep infinity
+    depends_on:
+      - node1
+      - node2
+      - node3
 networks:
   default:
    driver: bridge
