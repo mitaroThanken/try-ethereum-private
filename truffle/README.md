@@ -30,3 +30,6 @@ geth -networkid 50155 \
     --bootnodes $(cat ~/bootnode-enode.txt) \
     --http
 
+### Attach truffle console
+
+truffle console --network geth
