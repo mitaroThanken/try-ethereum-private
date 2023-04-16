@@ -33,3 +33,9 @@ geth -networkid 50155 \
 ### Attach truffle console
 
 truffle console --network geth
+
+---
+
+let account = (await web3.eth.getAccounts())[0];
+await web3.eth.getBalance(account);
+migrate
