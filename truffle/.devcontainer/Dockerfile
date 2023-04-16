@@ -1,4 +1,8 @@
-FROM mcr.microsoft.com/devcontainers/javascript-node:0-18-bullseye
+FROM ethereum/client-go:alltools-v1.11.5 as geth
+
+FROM mcr.microsoft.com/devcontainers/javascript-node:0-18-bullseye as devcontainer
+
+COPY --from=geth /usr/local/bin /usr/local/bin
 
 ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y \

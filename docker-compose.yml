@@ -181,6 +181,7 @@ services:
     build:
       context: ./truffle/.devcontainer
       dockerfile: Dockerfile
+      target: devcontainer
     volumes:
       - ./:/workspaces:cached
     command: sleep infinity
