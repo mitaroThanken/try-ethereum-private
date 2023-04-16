@@ -184,6 +184,20 @@ services:
       target: devcontainer
     volumes:
       - ./:/workspaces:cached
+      - type: volume
+        source: truffle-ethereum-volume
+        target: /home/node/.ethereum
+      - type: volume
+        source: truffle-clef-volume
+        target: /home/node/.clef
+      - type: bind
+        source: geth-node/genesis.json
+        target: /home/node/genesis.json
+        read_only: true
+      - type: bind
+        source: bootnode/enode.txt
+        target: /home/node/bootnode-enode.txt
+        read_only: true
     command: sleep infinity
     depends_on:
       - node1
@@ -208,4 +222,8 @@ volumes:
   geth-node2-volume:
     external: true
   geth-node3-volume:
+    external: true
+  truffle-ethereum-volume:
+    external: true
+  truffle-clef-volume:
     external: true
