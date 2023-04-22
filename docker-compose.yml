@@ -105,11 +105,65 @@ services:
     networks:
       default:
         ipv4_address: 172.29.0.2
-    command: /root/boot.sh 10
+    command: /root/boot.sh 5
     depends_on:
       - bootnode
-      - node1
       - node2-clef
+  node3-clef:
+    image: ethereum/client-go:alltools-v1.11.5
+    volumes:
+      - type: volume
+        source: geth-node3-volume
+        target: /root/.ethereum
+        read_only: true
+      - type: volume
+        source: clef-node3-volume
+        target: /root/.clef
+      - type: bind
+        source: clef-node3/PASSWORD
+        target: /root/PASSWORD
+        read_only: true
+      - type: bind
+        source: clef-node/rules.js
+        target: /root/rules.js
+        read_only: true
+      - type: bind
+        source: clef-node/boot.sh
+        target: /root/boot.sh
+        read_only: true
+    networks:
+      default:
+        ipv4_address: 172.29.0.30
+    command: /root/boot.sh
+  node3:
+    image: ethereum/client-go:alltools-v1.11.5
+    volumes:
+      - type: volume
+        source: geth-node3-volume
+        target: /root/.ethereum
+      - type: bind
+        source: geth-node3/etherbase
+        target: /root/etherbase
+        read_only: true
+      - type: bind
+        source: geth-node3/PASSWORD
+        target: /root/PASSWORD
+        read_only: true
+      - type: bind
+        source: geth-node/boot-with-clef.sh
+        target: /root/boot.sh
+        read_only: true
+      - type: bind
+        source: bootnode/enode.txt
+        target: /root/bootnode-enode.txt
+        read_only: true
+    networks:
+      default:
+        ipv4_address: 172.29.0.3
+    command: /root/boot.sh 5
+    depends_on:
+      - bootnode
+      - node3-clef
   besu-node1:
     build:
       context: ./besu-node
@@ -131,16 +185,17 @@ services:
         target: /opt/besu/geth-node2-enode
         read_only: true
       - type: bind
+        source: geth-node3/enode
+        target: /opt/besu/geth-node3-enode
+        read_only: true
+      - type: bind
         source: besu-node/boot.sh
         target: /opt/besu/boot.sh
         read_only: true
     networks:
       default:
         ipv4_address: 172.29.0.4
-    entrypoint: /opt/besu/boot.sh 15
-    depends_on:
-      - node1
-      - node2
+    entrypoint: /opt/besu/boot.sh
   besu-node2:
     build:
       context: ./besu-node
@@ -162,16 +217,17 @@ services:
         target: /opt/besu/geth-node2-enode
         read_only: true
       - type: bind
+        source: geth-node3/enode
+        target: /opt/besu/geth-node3-enode
+        read_only: true
+      - type: bind
         source: besu-node/boot.sh
         target: /opt/besu/boot.sh
         read_only: true
     networks:
       default:
         ipv4_address: 172.29.0.5
-    entrypoint: /opt/besu/boot.sh 15
-    depends_on:
-      - node1
-      - node2
+    entrypoint: /opt/besu/boot.sh
   bootnode:
     image: ethereum/client-go:alltools-v1.11.5
     volumes:
@@ -200,6 +256,8 @@ volumes:
   geth-node1-volume:
     external: true
   geth-node2-volume:
+    external: true
+  geth-node3-volume:
     external: true
   besu-node1-volume:
     external: true
