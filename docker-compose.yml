@@ -166,6 +166,30 @@ services:
       - bootnode
       - node1
       - node3-clef
+  besu-node1:
+    build:
+      context: ./besu-node
+      dockerfile: Dockerfile
+    volumes:
+      - type: volume
+        source: besu-node1-volume
+        target: /opt/besu/data
+      - type: bind
+        source: genesis.json
+        target: /opt/besu/genesis.json
+        read_only: true
+      - type: bind
+        source: bootnode/enode.txt
+        target: /opt/besu/bootnode-enode.txt
+        read_only: true
+    networks:
+      default:
+        ipv4_address: 172.29.0.4
+    entrypoint: sleep infinity
+    depends_on:
+      - node1
+      - node2
+      - node3
   bootnode:
     image: ethereum/client-go:alltools-v1.11.5
     volumes:
@@ -196,4 +220,6 @@ volumes:
   geth-node2-volume:
     external: true
   geth-node3-volume:
+    external: true
+  besu-node1-volume:
     external: true

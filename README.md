@@ -40,7 +40,7 @@ WIP
     docker run \
     -v geth-node1-volume:/root/.ethereum \
     --mount type=bind,source="$(pwd)"/geth-node1/PASSWORD,target=/root/PASSWORD,readonly \
-    --mount type=bind,source="$(pwd)"/geth-node/genesis.json,target=/root/genesis.json,readonly \
+    --mount type=bind,source="$(pwd)"/genesis.json,target=/root/genesis.json,readonly \
     -it --rm \
     ethereum/client-go:alltools-v1.11.5 \
     /bin/sh
@@ -421,7 +421,7 @@ WIP
 
 1. アタッチしたシェルにて、初期設定を行う
 
-    `--chainid` は `geth-node/genesis.json` での設定と合わせる。
+    `--chainid` は `genesis.json` での設定と合わせる。
 
     ```shell
     clef --chainid 50155 --suppress-bootwarn init
