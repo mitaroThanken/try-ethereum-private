@@ -93,6 +93,8 @@
 
         `geth init genesis.json`
 
------
+1. 起動スクリプトを作る
 
-besu --genesis-file=genesis.json --data-path=./data --bootnodes=enode://4dd46b11efa7e159cc0eab4175bc7879f8a7b10b70d26047337a08b819d6f27c5cd8a7f5f29e1274da5e854914ad894f75f01d1b7c7666769c0525d9d33e1ab0@172.29.0.1:30303,enode://2bed7c590328862d1a83ddaa7554500a17fecd629545746b1d36d762025b659057ed0ff22b65f5b7a99497a2ba4ffa96eb6656ba710a97bc33b675cd2111a06b@172.29.0.2:30303,enode://3c693d98bf6917327dba9045999c940ea354445e7e9512399fbf86a47b711c8890b209a6e77edfd0a9f00fe2bfb82bb45314e08072d383db0d2d32c3a5e5ff1d@172.29.0.3:30303 --network-id=50155 --p2p-interface=$(hostname -i)
+    Geth の時と同様、起動タイミングの調整等のため、スクリプトを用意する。
+
+    `besu-node/boot.sh` を参照。
