@@ -6,7 +6,7 @@ sleep ${SLEEP}
 geth -networkid 50155 \
     --nat extip:$(hostname -i) \
     --netrestrict 172.29.0.0/16 \
-    --bootnodes $(cat /root/bootnode-enode) \
+    --bootnodes $(paste /root/*-enode -d ",") \
     --syncmode full \
     --mine \
     --miner.etherbase $(cat /root/etherbase) \

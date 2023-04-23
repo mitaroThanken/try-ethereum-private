@@ -44,15 +44,26 @@ services:
         target: /root/boot.sh
         read_only: true
       - type: bind
-        source: bootnode/enode
-        target: /root/bootnode-enode
+        source: geth-node2/enode
+        target: /root/geth-node2-enode
+        read_only: true
+      - type: bind
+        source: geth-node3/enode
+        target: /root/geth-node3-enode
+        read_only: true
+      - type: bind
+        source: besu-node1/enode
+        target: /root/besu-node1-enode
+        read_only: true
+      - type: bind
+        source: besu-node2/enode
+        target: /root/besu-node2-enode
         read_only: true
     networks:
       default:
         ipv4_address: 172.29.0.1
     command: /root/boot.sh 5
     depends_on:
-      - bootnode
       - node1-clef
   node2-clef:
     image: ethereum/client-go:alltools-v1.11.5
@@ -99,15 +110,26 @@ services:
         target: /root/boot.sh
         read_only: true
       - type: bind
-        source: bootnode/enode
-        target: /root/bootnode-enode
+        source: geth-node1/enode
+        target: /root/geth-node1-enode
+        read_only: true
+      - type: bind
+        source: geth-node3/enode
+        target: /root/geth-node3-enode
+        read_only: true
+      - type: bind
+        source: besu-node1/enode
+        target: /root/besu-node1-enode
+        read_only: true
+      - type: bind
+        source: besu-node2/enode
+        target: /root/besu-node2-enode
         read_only: true
     networks:
       default:
         ipv4_address: 172.29.0.2
     command: /root/boot.sh 5
     depends_on:
-      - bootnode
       - node2-clef
   node3-clef:
     image: ethereum/client-go:alltools-v1.11.5
@@ -154,15 +176,26 @@ services:
         target: /root/boot.sh
         read_only: true
       - type: bind
-        source: bootnode/enode
-        target: /root/bootnode-enode
+        source: geth-node1/enode
+        target: /root/geth-node1-enode
+        read_only: true
+      - type: bind
+        source: geth-node2/enode
+        target: /root/geth-node2-enode
+        read_only: true
+      - type: bind
+        source: besu-node1/enode
+        target: /root/besu-node1-enode
+        read_only: true
+      - type: bind
+        source: besu-node2/enode
+        target: /root/besu-node2-enode
         read_only: true
     networks:
       default:
         ipv4_address: 172.29.0.3
     command: /root/boot.sh 5
     depends_on:
-      - bootnode
       - node3-clef
   besu-node1:
     build:
@@ -177,6 +210,10 @@ services:
         target: /opt/besu/genesis.json
         read_only: true
       - type: bind
+        source: besu-node/boot.sh
+        target: /opt/besu/boot.sh
+        read_only: true
+      - type: bind
         source: geth-node1/enode
         target: /opt/besu/geth-node1-enode
         read_only: true
@@ -189,8 +226,8 @@ services:
         target: /opt/besu/geth-node3-enode
         read_only: true
       - type: bind
-        source: besu-node/boot.sh
-        target: /opt/besu/boot.sh
+        source: besu-node2/enode
+        target: /opt/besu/besu-node2-enode
         read_only: true
     networks:
       default:
@@ -209,6 +246,10 @@ services:
         target: /opt/besu/genesis.json
         read_only: true
       - type: bind
+        source: besu-node/boot.sh
+        target: /opt/besu/boot.sh
+        read_only: true
+      - type: bind
         source: geth-node1/enode
         target: /opt/besu/geth-node1-enode
         read_only: true
@@ -221,24 +262,13 @@ services:
         target: /opt/besu/geth-node3-enode
         read_only: true
       - type: bind
-        source: besu-node/boot.sh
-        target: /opt/besu/boot.sh
+        source: besu-node1/enode
+        target: /opt/besu/besu-node1-enode
         read_only: true
     networks:
       default:
         ipv4_address: 172.29.0.5
     entrypoint: /opt/besu/boot.sh
-  bootnode:
-    image: ethereum/client-go:alltools-v1.11.5
-    volumes:
-      - type: bind
-        source: bootnode/boot.key
-        target: /root/boot.key
-        read_only: true
-    networks:
-      default:
-        ipv4_address: 172.29.0.100
-    command: bootnode -nodekey /root/boot.key -nat extip:172.29.0.100 -netrestrict 172.29.0.0/16
 networks:
   default:
    driver: bridge

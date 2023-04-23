@@ -4,7 +4,7 @@ echo "Wait ${SLEEP} seconds..."
 sleep ${SLEEP}
 besu --genesis-file=genesis.json \
     --data-path=data \
-    --bootnodes=$(cat geth-node1-enode),$(cat geth-node2-enode),$(cat geth-node3-enode) \
+    --bootnodes $(paste *-enode -d ",") \
     --network-id=50155 \
     --nat-method=NONE \
     --p2p-host=$(hostname -i) \
