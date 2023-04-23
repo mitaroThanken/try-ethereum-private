@@ -44,8 +44,8 @@ services:
         target: /root/boot.sh
         read_only: true
       - type: bind
-        source: bootnode/enode.txt
-        target: /root/bootnode-enode.txt
+        source: bootnode/enode
+        target: /root/bootnode-enode
         read_only: true
     networks:
       default:
@@ -99,8 +99,8 @@ services:
         target: /root/boot.sh
         read_only: true
       - type: bind
-        source: bootnode/enode.txt
-        target: /root/bootnode-enode.txt
+        source: bootnode/enode
+        target: /root/bootnode-enode
         read_only: true
     networks:
       default:
@@ -154,8 +154,8 @@ services:
         target: /root/boot.sh
         read_only: true
       - type: bind
-        source: bootnode/enode.txt
-        target: /root/bootnode-enode.txt
+        source: bootnode/enode
+        target: /root/bootnode-enode
         read_only: true
     networks:
       default:

@@ -141,7 +141,7 @@ WIP
     `enode://804a97abc3561ea5cba672707b418810262378849967a9b5f38d19c3ba687fcf2f927770a9ade6fa283f92da7d66b77f8dbe00ca704237415d2989ba7fe87a42@172.29.0.100:0?discport=30301`
     が Bootnode の enode アドレス。
 
-    これを`bootnode/enode.txt`に控える。改行は不要。
+    これを`bootnode/enode`に控える。改行は不要。
 
     控え終わったら、コンテナを停止させる。
 
@@ -517,7 +517,7 @@ command を一時的に `sleep infinity` にして、clef 用のコンテナ（�
     geth -networkid 50155 \
     --nat extip:$(hostname -i) \
     --netrestrict 172.29.0.0/16 \
-    --bootnodes $(cat /root/bootnode-enode.txt) \
+    --bootnodes $(cat /root/bootnode-enode) \
     --syncmode full \
     --mine \
     --miner.etherbase $(cat /root/etherbase) \
