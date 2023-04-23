@@ -96,5 +96,26 @@
 1. 起動スクリプトを作る
 
     Geth の時と同様、起動タイミングの調整等のため、スクリプトを用意する。
+    Geth との相違点は主に以下の通り。
+
+    * `bootnode` が使用できない
+
+        代わりに、実存するノードを指定する必要がある（？）。
+
+    * Geth に対する Clef はこの時点ではない
+
+        最終的に「存在しない」となる可能性あり。
+
+    * `miner` 系オプションが不要
+
+        というよりも、`Clique`・`IBFT 2.0`・`QBFT` を選択した場合、無視されるもよう。
+
+        参照）[Options - miner-coinbase](https://besu.hyperledger.org/en/stable/public-networks/reference/cli/options/#miner-coinbase)
+
+    * `sync-mode` は指定不要
+  
+        プライベートネットワークの場合 `FULL` がデフォルトであるため。
+
+        参照）[Options - sync-mode](https://besu.hyperledger.org/en/stable/public-networks/reference/cli/options/#sync-mode)
 
     `besu-node/boot.sh` を参照。
